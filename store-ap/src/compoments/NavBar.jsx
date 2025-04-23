@@ -6,6 +6,7 @@ const NavBar = () => {
     const links = [
         {title:"Home",to:'/'},
         {title:"Products",to:'/products'},
+        {title:"Errors",to:"/errors"},
     ];
     const authLinks = [
         {title:"Login",to:'/login'},

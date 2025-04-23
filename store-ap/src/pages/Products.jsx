@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import ProductList from '../compoments/ProductList';
+import Loading from '../compoments/Loading';
+import requests from '../api/ApiClient';
 
 const Products = () => {
   const [loadedProducts,setLoadedProducts] = useState([]);
@@ -8,8 +10,7 @@ const Products = () => {
   useEffect(()=>{
     async function fetchProducts() {
       try{
-        const response = await fetch('http://localhost:5000/products');
-        const data = await response.json();
+        const data = await requests.products.list();
         setLoadedProducts(data);        
       }
       catch(error){
@@ -21,7 +22,7 @@ const Products = () => {
     }
     fetchProducts();
   },[]);
-  if(loading) return <h1>Loading...</h1>
+  if(loading) return <Loading/>;
 
   return (
     <ProductList products={loadedProducts}/>

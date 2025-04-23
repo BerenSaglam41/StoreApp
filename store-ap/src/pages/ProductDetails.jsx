@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import ProductItem from '../compoments/ProductItem';
+import Loading from '../compoments/Loading';
+import requests from '../api/ApiClient';
 
 const ProductDetails = () => {
   const {id} = useParams();
@@ -9,8 +11,7 @@ const ProductDetails = () => {
   useEffect(()=>{
     async function fetchProductDetails () {
       try{
-        const response = await fetch("http://localhost:5000/products/"+id);
-        const data = await response.json();
+        const data = await requests.products.details(id)
         setProduct(data);
       }
       catch(error){
@@ -23,8 +24,9 @@ const ProductDetails = () => {
     fetchProductDetails();
   },[id])
   if(loading){
-    return(<h1>Loading ....</h1>)
+    return(<Loading message='Yükleniyor ...'/>)
   }
+  if(!product) return (<h1>Ürün Bulunamadı</h1>)
   return (<ProductItem product={product} />)
 }
 
