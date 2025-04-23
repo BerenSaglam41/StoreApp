@@ -1,10 +1,19 @@
-import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, IconButton, Typography } from '@mui/material'
-import React from 'react'
+import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, CircularProgress, IconButton, Typography } from '@mui/material'
+import React, { useState } from 'react'
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { Link } from 'react-router'
 import { currenyTRY } from '../utils/formats';
+import requests from '../api/ApiClient';
 const ProductCard = ({product}) => {
+    const [loading,setLoading] = useState(false);
+    function handleAddItem (productId){
+        setLoading(true);
+        requests.cart.addItem(productId)
+        .then(cart => console.log(cart))
+        .catch(err => console.log(err))
+        .finally(() => setLoading(false));
+    }
   return (
     <div>
       <Card>
@@ -35,7 +44,15 @@ const ProductCard = ({product}) => {
                 {/* <FavoriteIcon/> */}
                 <FavoriteBorderIcon/>
             </IconButton>
-            <Button>Sepete Ekle</Button>
+            <Button 
+                onClick={()=> handleAddItem(product.id)}
+            >
+                {loading ? 
+                <CircularProgress size="20px"/>
+                :
+                "Sepete Ekle"
+                }
+            </Button>
         </CardActions>
       </Card>
     </div>
