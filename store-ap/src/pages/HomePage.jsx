@@ -1,10 +1,9 @@
 import React from 'react'
+import Counter from './counter/Counter'
 
 const HomePage = () => {
   return (
-    <div>
-      <h1>Home Page</h1>
-    </div>
+    <Counter/>
   )
 }
 

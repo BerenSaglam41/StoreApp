@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { Button, CircularProgress, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import { currenyTRY } from '../utils/formats';
 import { Delete } from '@mui/icons-material'
-import Loading from '../compoments/Loading';
 import { useCartContext } from '../context/CartContext';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
@@ -12,7 +11,15 @@ const CartPage = () => {
 
   const { cart , setCart } = useCartContext();
   const [status,setStatus] = useState({loading:false , id : ""});
+
+  const subTotal = cart?.cartItems.reduce(
+    (toplam, item) => toplam + item.product.price * item.product.quantity,
+    0
+  ) || 0;
   
+  const tax = subTotal * 0.2;
+  const total = subTotal + tax;
+
   if(!cart || cart.cartItems.length === 0 ) return <Typography component='h4'>Sepetinizde Ürün Yok !</Typography>
   
   function handleAddItem(productId,id) {
@@ -111,6 +118,30 @@ const CartPage = () => {
               </TableCell>
             </TableRow>
           ))}
+          <TableRow>
+            <TableCell align="right" colspan={5} >
+              Ara Toplam
+            </TableCell>
+            <TableCell align="right" colspan={5} >
+              {currenyTRY.format(subTotal)}
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell align="right" colspan={5} >
+              Vergi
+            </TableCell>
+            <TableCell align="right" colspan={5} >
+              {currenyTRY.format(tax)}
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell align="right" colspan={5} >
+              Genel Toplam
+            </TableCell>
+            <TableCell align="right" colspan={5} >
+              {currenyTRY.format(total)}
+            </TableCell>
+          </TableRow>
         </TableBody>
       </Table>
     </TableContainer>
