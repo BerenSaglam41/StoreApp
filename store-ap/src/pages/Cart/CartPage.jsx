@@ -1,16 +1,18 @@
 import React, { useState } from 'react'
 import { Button, CircularProgress, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
-import { currenyTRY } from '../utils/formats';
+import { currenyTRY } from '../../utils/formats';
 import { Delete } from '@mui/icons-material'
-import { useCartContext } from '../context/CartContext';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
-import requests from '../api/ApiClient';
+import requests from '../../api/ApiClient';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCart } from './cartSlice';
 
 const CartPage = () => {
 
-  const { cart , setCart } = useCartContext();
+  const {cart} = useSelector((state) => state.cart);
   const [status,setStatus] = useState({loading:false , id : ""});
+  const dispatch = useDispatch();
 
   const subTotal = cart?.cartItems.reduce(
     (toplam, item) => toplam + item.product.price * item.product.quantity,
@@ -25,7 +27,7 @@ const CartPage = () => {
   function handleAddItem(productId,id) {
     setStatus({loading:true , id : id});
     requests.cart.addItem(productId)
-    .then((cart) => setCart(cart))
+    .then((cart) => dispatch(setCart(cart)))
     .catch(err => console.log(err))
     .finally(() => setStatus({loading:false , id : ""}));
   }
@@ -33,7 +35,7 @@ const CartPage = () => {
   function handleRemoveItem(productId,id,quantity = 1) {
     setStatus({loading:true , id : id});
     requests.cart.deleteItem(productId,quantity)
-    .then((cart) => setCart(cart))
+    .then((cart) => dispatch(setCart(cart)))
     .catch(err => console.log(err))
     .finally(() => setStatus({loading:false , id : ""}));
   }

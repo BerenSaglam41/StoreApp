@@ -3,15 +3,16 @@ import { useParams } from 'react-router'
 import ProductItem from '../compoments/ProductItem';
 import Loading from '../compoments/Loading';
 import requests from '../api/ApiClient';
-import { useCartContext } from '../context/CartContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCart } from './Cart/cartSlice';
 
 const ProductDetails = () => {
   const {id} = useParams();
   const [loading,setLoading] = useState(true);
   const [isAdding,setIsAdding] = useState(false);
   const [product,setProduct] = useState(null);
-  const {cart,setCart} = useCartContext();
-
+  const { cart } = useSelector((state) => state.cart);
+  const dispatch = useDispatch()
   const cartItem = cart?.cartItems.find(
     (i) => i.product.productId == product?.id
   );
@@ -19,7 +20,7 @@ const ProductDetails = () => {
   function handleAddItem (productId) {
     setIsAdding(true);
     requests.cart.addItem(productId)
-      .then(cart => setCart(cart))
+      .then(cart => dispatch(setCart(cart)))
       .catch(err => console.log(err))
       .finally(()=>setIsAdding(false));
   }

@@ -13,7 +13,6 @@ export default function Counter(){
                 <Button onClick={() => dispatch(increment())} >Increment</Button>
                 <Button onClick={() => dispatch(decrement())}>Decrement</Button>
                 <Button onClick={() => dispatch(incrementByValue(5))}>Increment By Valye</Button>
-
             </ButtonGroup>
         </>
     )

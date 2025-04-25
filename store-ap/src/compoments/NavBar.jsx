@@ -2,9 +2,10 @@ import {AppBar, Badge, Box, Button, IconButton, Toolbar} from '@mui/material'
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { Link, NavLink } from 'react-router-dom';
-import { useCartContext } from '../context/CartContext';
+import { useSelector } from 'react-redux';
 const NavBar = () => {
-    const { cart } = useCartContext();
+    const { cart } = useSelector((state => state.cart));
+
     const itemCount = cart?.cartItems.reduce((total , item) => total+item.product.quantity,0)
     const links = [
         {title:"Home",to:'/'},
