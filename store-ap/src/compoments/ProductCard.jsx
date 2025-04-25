@@ -5,12 +5,14 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { Link } from 'react-router'
 import { currenyTRY } from '../utils/formats';
 import requests from '../api/ApiClient';
+import { useCartContext } from '../context/CartContext';
 const ProductCard = ({product}) => {
+    const { setCart } = useCartContext();
     const [loading,setLoading] = useState(false);
     function handleAddItem (productId){
         setLoading(true);
         requests.cart.addItem(productId)
-        .then(cart => console.log(cart))
+        .then(cart => setCart(cart))
         .catch(err => console.log(err))
         .finally(() => setLoading(false));
     }

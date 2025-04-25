@@ -9,7 +9,7 @@ import ProductDetails from './pages/ProductDetails'
 import ErrorPages from './pages/errors/Error'
 import ServerError from './pages/errors/ServerError'
 import NotFound from './pages/errors/NotFound'
-import { useContext, useEffect } from 'react'
+import { useEffect } from 'react'
 import requests from './api/ApiClient'
 import { CartContext, useCartContext } from './context/CartContext'
 export const router = createBrowserRouter(
