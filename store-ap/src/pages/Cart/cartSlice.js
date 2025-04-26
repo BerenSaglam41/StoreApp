@@ -18,6 +18,18 @@ export const addItemToCart = createAsyncThunk(
     }
 )
 
+export const deleteItemToCart = createAsyncThunk(
+    "cart/deleteItemToCart",
+    async ({productId,quantity=1,key =""}) => {
+        try{
+            return await requests.cart.deleteItem(productId,quantity);
+        }
+        catch(error){
+            console.log(error);
+        }
+    }
+)
+
 export const cartSlice = createSlice({
     name : "cart",
     initialState,
@@ -28,17 +40,25 @@ export const cartSlice = createSlice({
     },
     extraReducers : (builder) => {
         builder.addCase(addItemToCart.pending,(state,action)=>{
-            console.log(action);
             state.status = "pendingAddItem"+action.meta.arg.productId;
         });
         builder.addCase(addItemToCart.fulfilled,(state,action) => {
-            console.log(action);
             state.cart = action.payload;
             state.status = "idle";
         });
         builder.addCase(addItemToCart.rejected,(state) => {
             state.status = "idle";
-        })
+        });
+        builder.addCase(deleteItemToCart.pending,(state,action)=>{
+            state.status = "pendingDeleteItem"+action.meta.arg.productId+action.meta.arg.key;
+        });
+        builder.addCase(deleteItemToCart.fulfilled,(state,action) => {
+            state.cart = action.payload;
+            state.status = "idle";
+        });
+        builder.addCase(deleteItemToCart.rejected,(state) => {
+            state.status = "idle";
+        });
     },
 })
 
