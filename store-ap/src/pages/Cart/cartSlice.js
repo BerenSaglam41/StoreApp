@@ -20,6 +20,7 @@ export const addItemToCart = createAsyncThunk(
 
 export const deleteItemToCart = createAsyncThunk(
     "cart/deleteItemToCart",
+    // eslint-disable-next-line no-unused-vars
     async ({productId,quantity=1,key =""}) => {
         try{
             return await requests.cart.deleteItem(productId,quantity);
