@@ -25,7 +25,7 @@ const initialState = productAdapter.getInitialState({
 export const catalogSlice = createSlice({
     name : "catalog",
     initialState,
-    reducers : {},
+    reducers : {},  
     extraReducers : (builder) => {
         builder.addCase(fetchProducts.pending,(state) =>{
             state.status = "pendingFetchProducts"
