@@ -2,8 +2,10 @@ import { LockOutlined } from '@mui/icons-material'
 import { Avatar, Box, Button, Container, Paper, TextField, Typography } from '@mui/material'
 import React from 'react'
 import { useForm } from 'react-hook-form'
+import requests from '../api/ApiClient'
+import { useNavigate } from 'react-router'
 const LoginPage = () => {
-
+  const navigate = useNavigate()
   const { register,handleSubmit,formState: { errors,isValid } } = useForm({
     defaultValues : {
       username : "",
@@ -12,7 +14,12 @@ const LoginPage = () => {
   })
 
   function handleForm(data){
-    console.log(data);
+    requests.account.login(data)
+      .then((result) => {
+        console.log(result);
+        navigate('/')
+      })
+      .catch((err) => console.log(err));
   }
 
   return (

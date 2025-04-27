@@ -74,10 +74,17 @@ const cart = {
     deleteItem : (productId,quantity = 1) => methods.delete(`carts?productId=${productId}&quantity=${quantity}`),
 }
 
+const account = {
+    login : (FormData) => methods.post('users/login',FormData),
+    register : (FormData) => methods.post('users/register',FormData),
+    getUser : () => methods.post('users/getUser'),
+}
+
 const requests = {
     products,
     errors,
     cart,
+    account 
 }
 
 export default requests;
