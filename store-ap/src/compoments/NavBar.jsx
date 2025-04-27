@@ -2,20 +2,23 @@ import {AppBar, Badge, Box, Button, IconButton, Toolbar} from '@mui/material'
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { Link, NavLink } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-const NavBar = () => {
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../pages/account/accountSlice.js'
+const links = [
+    {title:"Home",to:'/'},
+    {title:"Products",to:'/products'},
+    {title:"Errors",to:"/errors"},
+];
+const authLinks = [
+    {title:"Login",to:'/login'},
+    {title:"Register",to:'/register'},
+];
+const NavBar = () => { 
+    const dispatch = useDispatch()
     const { cart } = useSelector((state => state.cart));
-
+    const { user } = useSelector((state) => state.account);
     const itemCount = cart?.cartItems.reduce((total , item) => total+item.product.quantity,0)
-    const links = [
-        {title:"Home",to:'/'},
-        {title:"Products",to:'/products'},
-        {title:"Errors",to:"/errors"},
-    ];
-    const authLinks = [
-        {title:"Login",to:'/login'},
-        {title:"Register",to:'/register'},
-    ];
+
   return (
     <AppBar position='static' sx={{backgroundColor:'secondary.light'}}>
       <Toolbar>
@@ -44,12 +47,26 @@ const NavBar = () => {
                 </Badge>
             </IconButton>
             {
-                authLinks.map((link)=>(
-                    <Button key={link.to} component={NavLink} to={link.to} color='inherit'>
-                        {link.title}
-                    </Button>
-                ))
+                user ? (
+                    <>
+                        <Button color='inherit' >{user.username}</Button>
+                        <Button onClick={()=>dispatch(logout())} color='inherit' >Logout</Button>
+                    </>
+                )
+                :
+                (
+                    <>
+                    {
+                        authLinks.map((link)=>(
+                            <Button key={link.to} component={NavLink} to={link.to} color='inherit'>
+                                {link.title}
+                            </Button>
+                        ))
+                    }
+                    </>
+                )
             }
+
         </Box>
       </Toolbar>
     </AppBar>
