@@ -1,8 +1,19 @@
 import { LockOutlined } from '@mui/icons-material'
 import { Avatar, Box, Button, Container, Paper, TextField, Typography } from '@mui/material'
 import React from 'react'
+import { useForm } from 'react-hook-form'
 
 const RegisterPage = () => {
+    const { register,handleSubmit,formState: { errors,isValid } } = useForm({
+      defaultValues : {
+        username : "",
+        email : "",
+        password : "",
+      }
+    })
+    function handleForm(data){
+      console.log(data);
+    }
   return (
     <div>
       <Container maxWidth='xs'>
@@ -13,33 +24,54 @@ const RegisterPage = () => {
             <Typography component='h1' variant='h5' sx={{textAlign:'center',mb:2}}>
               Register
             </Typography>
-            <Box component='form' sx={{mb:2}}>
+            <Box component='form' onSubmit={handleSubmit(handleForm)} sx={{mb:2}}>
               <TextField
-                name='username'
+                {...register('username',{
+                  required : "Username Alanı Zorunlu",
+                  minLength : {
+                    value : 3,
+                    message : "Username minimum 3 karakter olmalıdır ."
+                  }
+                })}
                 label='Enter Username'
                 size='small'
                 fullWidth
-                required
                 autoFocus
                 sx={{mb:2}}
+                error = {!!errors.username}
+                helperText={errors.username?.message}
               />
               <TextField
-                name='email'
+                {...register('email',{
+                  required : "Email Alanı Zorunlu",
+                  minLength : {
+                    value : 6,
+                    message : "Email minimum 6 karakter olmalıdır ."
+                  }
+                })}
                 label='Enter email'
                 size='small'
                 fullWidth
-                required
                 autoFocus
                 sx={{mb:2}}
+                error = {!!errors.email}
+                helperText={errors.email?.message}
               />
               <TextField 
-                name='password'
+                {...register('password',{
+                  required : "Password Alanı Zorunlu",
+                  minLength : {
+                    value : 6,
+                    message : "Password minimum 6 karakter olmaldıır ç"
+                  }
+                })}
                 type='password'
                 label='Enter password'
                 size='small'
                 fullWidth
-                required
                 sx={{mb:2}}
+                error =  {errors.password}
+                helperText={errors.password?.message}
               />
               <Button
                 type='submit' 
@@ -47,6 +79,7 @@ const RegisterPage = () => {
                 fullWidth
                 sx={{mt:2}}
                 color='secondary'
+                disabled={!isValid}
               >
                 Submit
               </Button>
