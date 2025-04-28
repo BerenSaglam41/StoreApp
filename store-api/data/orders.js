@@ -95,8 +95,8 @@ async function add(order) {
 async function payment(order) {
   // const cart = await getCart(order.customerId);
   var iyzipay = new Iyzipay({
-    apiKey: "api_key",
-    secretKey: "secret_key",
+    apiKey: "sandbox-7Uo08Qrt8uKew8OqweS3ix1UGADBJ4zT",
+    secretKey: "sandbox-GpRp4XIEnIEnxQa0LfqnW4ZssW0F7zWF",
     uri: "https://sandbox-api.iyzipay.com",
   });
 
