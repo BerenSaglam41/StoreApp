@@ -14,6 +14,8 @@ import MainLayout from './layouts/Main'
 import Loading from './compoments/Loading'
 import { getUser } from './pages/account/accountSlice'
 import { getCart } from './pages/Cart/cartSlice'
+import CheckOut from './pages/checkout/CheckOut'
+import AuthGuard from './auth/AuthGuard.jsx'
 export const router = createBrowserRouter(
   [
     { path :'/',
@@ -31,6 +33,9 @@ export const router = createBrowserRouter(
         {path : "cart",element : <CartPage/>},
         {path : "login",element : <LoginPage/>},
         {path : "register",element : <RegisterPage/>},
+        {element : <AuthGuard/> ,children : [
+          {path : "checkout",element : <CheckOut/>},
+        ]},
         {path : "errors",children :[
             {index : true , element : <ErrorPages/>},
             {path : 'server-error' , element : <ServerError/>},
@@ -46,13 +51,16 @@ export const router = createBrowserRouter(
 function App() {
   const dispatch = useDispatch()
   const [loading,setLoading] = useState(true);
+
   const initApp = async () => {
     await dispatch(getUser());
     await dispatch(getCart());
   }
+
   useEffect(()=>{
     initApp().then(()=>setLoading(false));
   },[]);
+  
   if(loading) return <Loading message='Uygulama Başlatılıyor...' size={25} />
   return <RouterProvider router={router}/>
 }
