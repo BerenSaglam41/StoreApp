@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Button, CircularProgress, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { Alert, Box, Button, CircularProgress, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import { currenyTRY } from '../../utils/formats';
 import { Delete } from '@mui/icons-material'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
@@ -21,7 +21,7 @@ const CartPage = () => {
   const tax = subTotal * 0.2;
   const total = subTotal + tax;
 
-  if(!cart || cart.cartItems.length === 0 ) return <Typography component='h4'>Sepetinizde Ürün Yok !</Typography>
+  if(!cart || cart.cartItems.length === 0 ) return <Alert severity='warning' component='h4'>Sepetinizde Ürün Yok !</Alert>
   
   return (
     <>

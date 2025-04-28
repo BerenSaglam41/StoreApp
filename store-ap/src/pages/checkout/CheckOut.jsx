@@ -1,8 +1,10 @@
 import {
   Box,
   Button,
+  CircularProgress,
   Grid,
   Paper,
+  Stack,
   Step,
   StepLabel,
   Stepper,
@@ -14,6 +16,10 @@ import AdressForm from "./AdressForm";
 import PaymentForm from "./PaymentForm";
 import Review from "./Review";
 import { ChevronLeftRounded, ChevronRightRounded } from "@mui/icons-material";
+import { FormProvider, useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import requests from "../../api/ApiClient";
+import { clearCart } from "../Cart/cartSlice";
 
 const steps = ["Teslimat Bilgileri", "Ödeme", "Sipariş Özeti"];
 
@@ -32,25 +38,49 @@ const getStepContent = (step) => {
 
 const CheckOut = () => {
   const [activeStep, setActiveStep] = useState(0);
-
+  const [orderId,setOrderId] = useState(0);
+  const [loading,setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const methods = useForm()
   function handlePrevious() {
     setActiveStep(activeStep - 1);
   }
 
-  function handleNext() {
-    setActiveStep(activeStep + 1);
+  async function handleNext(data) {
+    if(activeStep == 2){
+      //sipariş kayıt
+      setLoading(true);
+      try{
+        const result = await requests.orders.createOrder(data);
+        setOrderId(result.orderId);
+        setActiveStep(activeStep + 1 );
+        dispatch(clearCart());
+      }
+      catch(error){
+        console.log(error);
+      }
+      finally{
+        setLoading(false); 
+      }
+    }
+    else{
+      setActiveStep(activeStep + 1);
+    }
   }
 
   return (
+    <FormProvider {...methods}>
     <Paper>
       <Grid container spacing={3}>
+        { activeStep !== steps.length &&
         <Grid
           size={4}
           sx={{ p: 3, borderRight: "1px solid", borderColor: "divider" }}
         >
           <Info />
         </Grid>
-        <Grid size={8}>
+        }
+        <Grid size={activeStep !== steps.length ? 8 : 12}>
           <Stepper activeStep={activeStep} sx={{ height: 40, mb: 4 }}>
             {steps.map((label) => (
               <Step key={label} sx={{ color: "secondary" }}>
@@ -59,9 +89,23 @@ const CheckOut = () => {
             ))}
           </Stepper>
           {activeStep === steps.length ? (
-            <Typography variant="h5">Siparişinizi aldık</Typography>
+            <Stack>
+              <Typography variant="h5">Siparişinizi aldık</Typography>
+              <Typography variant="body1" gutterBottom>
+                Sipariş Numaranız <strong>{orderId}</strong>. Sipariş onaylandığında 
+                size bir e-posta gelecektir.
+              </Typography>
+              <Button 
+                color="secondary" 
+                sx={{alignSelf:"start"}} 
+                variant="contained"
+              >
+                Siparişleri Listele.
+              </Button>
+            </Stack>
           ) : (
             <>
+            <form onSubmit={methods.handleSubmit(handleNext)}>
               {getStepContent(activeStep)}
               <Box sx={{
                 display: "flex",
@@ -78,19 +122,27 @@ const CheckOut = () => {
                   </Button>
                 }
                 <Button
-                  onClick={handleNext}
+                  type="submit"
                   startIcon={<ChevronRightRounded />}
                   variant="contained"
                   color="secondary"
                 >
-                  İleri
+                  {
+                    loading ? (
+                      <CircularProgress size={25}/>
+                    ) : (
+                      activeStep === 2 ? "Siparişi Tamamla" : "İleri"
+                    )
+                  }
                 </Button>
               </Box>
+              </form>
             </>
           )}
         </Grid>
       </Grid>
     </Paper>
+    </FormProvider>
   );
 };
 

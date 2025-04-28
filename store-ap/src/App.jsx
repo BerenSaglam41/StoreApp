@@ -16,6 +16,7 @@ import { getUser } from './pages/account/accountSlice'
 import { getCart } from './pages/Cart/cartSlice'
 import CheckOut from './pages/checkout/CheckOut'
 import AuthGuard from './auth/AuthGuard.jsx'
+import Orders from './pages/orders/Orders.jsx'
 export const router = createBrowserRouter(
   [
     { path :'/',
@@ -35,6 +36,7 @@ export const router = createBrowserRouter(
         {path : "register",element : <RegisterPage/>},
         {element : <AuthGuard/> ,children : [
           {path : "checkout",element : <CheckOut/>},
+          {path : "orders",element : <Orders />},
         ]},
         {path : "errors",children :[
             {index : true , element : <ErrorPages/>},
