@@ -25,3 +25,28 @@ Bu proje, **React**, **Redux Toolkit**, **React Router DOM** ve **Material UI (M
 
 ## 📁 Proje Yapısı
 
+```text
+store-ap/   React, Redux Toolkit ve Material UI tabanlı arayüz
+store-api/  Express API ve ödeme işlemleri
+```
+
+## 🚀 Yerel Kurulum
+
+### API
+
+```bash
+cd store-api
+npm install
+npm start
+```
+
+### Arayüz
+
+```bash
+cd store-ap
+npm install
+npm run dev
+```
+
+Ödeme sağlayıcısı ve JWT gibi gizli değerleri yerel ortam değişkenlerinde tutun; gerçek anahtarları repoya eklemeyin.
+
